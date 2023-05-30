@@ -7,7 +7,6 @@ today = mm + '/' + dd + '/' + yyyy;
 document.getElementById('date').innerHTML = today;
 
 
-
 let movieData = {
 	"The Darjeeling Limited": {
 	  plot: "A year after their father's funeral, three brothers travel across India by train in an attempt to bond with each other.",
@@ -44,110 +43,59 @@ let movieData = {
 	},
   };
 
+  //Create a movieData array
+var movieDataArray = Object.keys(movieData).map(key => {
+    let movieArray = movieData[key];
+    movieArray.title = key
+    return movieArray;
+});
 
-
-// The Darjeeling Limited Data
-// I assign the The Darjeeling Limited Plot data from the movieData object into a variabe
-// And I will continue to do that with all the other elements Cast, Runtime, Rating, Year
-let darjeeling_plot = movieData['The Darjeeling Limited']['plot'];
-// With this line of code I get and ID of my variable that I will be able to use
-// in my HTML file, so I can make the data visible exactly where I want it on the screen
-	document.getElementById('darjeelingplot').innerHTML = darjeeling_plot;
-
-let darjeeling_cast = movieData['The Darjeeling Limited']['cast'];
-// Here In oreder to present the data of the cast as list on the screen I turn it into a list
-// In order to that first I turn the javascript object (in this case the cast object)
-// into an array with the Object.values()
-	let darjeelingcastList = Object.values(darjeeling_cast);
-//Then I get the ID for my list that I can use in my HTML file
-	let darjeelinglist = document.getElementById("darjeelingcast");
-// This is the code that turnes my array into a list
-	darjeelingcastList.forEach((item) => {
-		let li = document.createElement("li");
-		li.innerText = item;
-		darjeelinglist.appendChild(li);
-	});
-
-let darjeeling_runtime = movieData['The Darjeeling Limited']['runtime'];
-	document.getElementById('darjeelingruntime').innerHTML = darjeeling_runtime;
-
-let darjeeling_rating = movieData['The Darjeeling Limited']['rating'];
-	document.getElementById('darjeelingrating').innerHTML = darjeeling_rating;
-
-let darjeeling_year = movieData['The Darjeeling Limited']['year'];
-	document.getElementById('darjeelingyear').innerHTML = darjeeling_year;
-
-
-
-
-// The Royal Tenenbaums Data	
-let royal_plot = movieData['The Royal Tenenbaums']['plot'];
-	document.getElementById('royalplot').innerHTML = royal_plot;
-
-let royal_cast = movieData['The Royal Tenenbaums']['cast'];
-	let royalcastList = Object.values(royal_cast);
-	let royallist = document.getElementById("royalcast");
-	royalcastList.forEach((item) => {
-		let li = document.createElement("li");
-		li.innerText = item;
-		royallist.appendChild(li);
-	});
-
-let royal_runtime = movieData['The Royal Tenenbaums']['runtime'];
-	document.getElementById('royalruntime').innerHTML = royal_runtime;
-
-let royal_rating = movieData['The Royal Tenenbaums']['rating'];
-	document.getElementById('royalrating').innerHTML = royal_rating;
-
-let royal_year = movieData['The Royal Tenenbaums']['year'];
-	document.getElementById('royalyear').innerHTML = royal_year;
+//Iterate through the movie data array and create a card for each movie
+  movieDataArray.forEach((movie) => {
+    // Construct card
+    const content = `
+    <div class="card">
+    	<div class="card-header">
+      	<h2>${movie.title}</h3>
+      </div>
+      <div class="card-body">
+        <h3>Plot</h3>
+        <p>${movie.plot}</p>
+        <h3>Cast</h3>
+        <p>${movie.cast.join(', ')}</p>
+        <h3>Rating</h3>
+        <p>${movie.rating}</p>
+        <h3>Runtime</h3>
+        <p>${movie.runtime}</p>
+        <h3>Year</h3>
+        <p>${movie.year}</p>
+      </div>
+    </div>
+    `;
+    // Append newyly created card element to the container
+    container.innerHTML += content;
+  });
 
 
 
+const sort_title_btn = document.querySelector('.sort-title');
 
-// Fantastaic Mr. Fox Data
-let fox_plot = movieData['Fantastic Mr. Fox']['plot'];
-	document.getElementById('foxplot').innerHTML = fox_plot;
+let desc = false;
+sort_title_btn.addEventListener('click', () => {
+    let array = sort_array_by(movieDataArray, 'movie.title', desc());
+    displayList(array);
 
-let fox_cast = movieData['Fantastic Mr. Fox']['cast'];
-	let foxcastList = Object.values(fox_cast);
-	let foxlist = document.getElementById("foxcast");
-	foxcastList.forEach((item) => {
-		let li = document.createElement("li");
-		li.innerText = item;
-		foxlist.appendChild(li);
-	});
+    desc = !desc;
+});
 
-let fox_runtime = movieData['Fantastic Mr. Fox']['runtime'];
-	document.getElementById('foxruntime').innerHTML = fox_runtime;
+function sort_array_by(array, sort, desc) {
+    array.sort(function (a, b) {
+        if (a[sort] < b[sort]) return -1;
+        if (a[sort] > b[sort]) return 1;
+        return 0;
+    });
 
-let fox_rating = movieData['Fantastic Mr. Fox']['rating'];
-	document.getElementById('foxrating').innerHTML = fox_rating;
+    if (desc) array.reverse();
 
-let fox_year = movieData['Fantastic Mr. Fox']['year'];
-	document.getElementById('foxyear').innerHTML = fox_year;
-
-
-
-
-// The Grand Budapest Hotel Data
-let hotel_plot = movieData['The Grand Budapest Hotel']['plot'];
-	document.getElementById('hotelplot').innerHTML = hotel_plot;
-
-let hotel_cast = movieData['The Grand Budapest Hotel']['cast'];
-	let hotelcastList = Object.values(hotel_cast);
-	let hotellist = document.getElementById("hotelcast");
-	hotelcastList.forEach((item) => {
-		let li = document.createElement("li");
-		li.innerText = item;
-		hotellist.appendChild(li);
-	});
-
-let hotel_runtime = movieData['The Grand Budapest Hotel']['runtime'];
-	document.getElementById('hotelruntime').innerHTML = hotel_runtime;
-
-let hotel_rating = movieData['The Grand Budapest Hotel']['rating'];
-	document.getElementById('hotelrating').innerHTML = hotel_rating;
-
-let hotel_year = movieData['The Grand Budapest Hotel']['year'];
-	document.getElementById('hotelyear').innerHTML = hotel_year;
+    return array;
+};
